@@ -1,15 +1,15 @@
 import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 
-const Player = props => {  
+const Player = props => {
     return (
         <Image
             source={props.player.imageSource}
             fadeDuration={0}
-            resizeMode='stretch'
+            resizeMode='center'
             style={{
-                width: 25,
-                height: 25,
+                width: props.size,
+                height: props.size,
             }} />
     )
 }

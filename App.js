@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import Player from './Objects/Player';
 import BoardGameController from './BoardGameController';
@@ -7,12 +7,12 @@ import Field from './Objects/fields/Field';
 
 export default function App() {
   const player = [];
-  player.push(new Player('apple', require('./assets/icons/apple.png')));
-  player.push(new Player('banana', require('./assets/icons/banana.png')));
-  player.push(new Player('cherry', require('./assets/icons/cherry.png')));
+  player.push(new Player('apple', 0, require('./assets/icons/apple.png'), 0));
+  player.push(new Player('banana', 1, require('./assets/icons/banana.png'), 1));
+  player.push(new Player('cherry', 2, require('./assets/icons/cherry.png'), 2));
 
-  const fieldWidth = Dimensions.get('window').width * (1 / 5);
-  const relativeSize = { width: fieldWidth, height: fieldWidth };
+  const fieldWidth = (1 / 5);
+  const relativeSize = { isSquare: true, size: fieldWidth, width: fieldWidth, height: fieldWidth };
   const fields = [];
   for (let i = 0; i < 5; i++) {
     const fieldRow = [];
