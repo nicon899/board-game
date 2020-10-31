@@ -1,7 +1,9 @@
 class Field {
-    constructor(id, relativeSize) {
+    constructor(id, relativeSize, connection) {
         this.id = id;
         this.relativeSize = relativeSize;
+        this.connectionLines = connection.connectionLines;
+        this.nextFields = connection.nextFields;
     }
 
     onEnter = (player) => {
@@ -12,6 +14,10 @@ class Field {
     }
 
     onPassThrough = (player) => {
+    }
+
+    getNextFields = () => {
+        return this.nextFields;
     }
 
 

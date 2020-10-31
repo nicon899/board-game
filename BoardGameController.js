@@ -14,13 +14,15 @@ const BoardGameController = props => {
         ToastAndroid.show("Dice: " + dice, ToastAndroid.SHORT);
         await moveTo(props.player[activePlayer], dice);
         setactivePlayer((activePlayer + 1) % props.player.length)
-       // console.log(props.player[activePlayer].name +': ' +props.player[activePlayer].field);
+        //console.log(props.player[activePlayer].name +': ' +props.player[activePlayer].field);
         setShowMove(true);
     }
 
     const moveTo = async (player, i) => {
         if (i <= 0) { return; };
-        const nextField = (player.field + 1) % 25;
+        const row0 = Math.floor(player.field / 5);
+        const col0 = player.field % 5;
+        const nextField = props.fields[row0][col0].getNextFields()[0];
         const row = Math.floor(nextField / 5);
         const col = nextField % 5;
         await childRef.current.move(player, nextField);
@@ -29,8 +31,8 @@ const BoardGameController = props => {
     }
 
     return (
-        <View style={{ flex: 1 }}>
-            <BoardView ref={childRef} fields={props.fields} player={props.player} numberOfFields={25} />
+        <View style={{ flex: 1, backgroundColor: '#000000' }}>
+            <BoardView ref={childRef} fields={props.fields} player={props.player} numberOfFields={50} />
             <View style={styles.bottomBar}>
                 {showMove && <Button title="Move" onPress={() => play()} />}
             </View>

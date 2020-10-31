@@ -4,8 +4,8 @@ import { Dimensions, StyleSheet, Text, View, Animated, Button, ScrollView } from
 import FieldView from './renderer/FieldView';
 import PlayerView from './renderer/PlayerView';
 
-const PLAYER_SIZE = 50;
-const MAX_SIZE = { width: Dimensions.get('window').width, height: Dimensions.get('window').height };
+const PLAYER_SIZE = Dimensions.get('window').width < Dimensions.get('window').height ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').height * 0.1
+const MAX_SIZE = Dimensions.get('window').width < Dimensions.get('window').height ? Dimensions.get('window').width : Dimensions.get('window').height;
 
 const BoardView = forwardRef((props, ref) => {
     const [fields, setFields] = useState([]);
@@ -24,7 +24,6 @@ const BoardView = forwardRef((props, ref) => {
             const newPlayerViews = [];
             for (let i = 0; i < props.player.length; i++) {
                 const fieldLayout = fieldViews[props.player[i].field];
-                console.log(props.player[i].name + ': ' + fieldLayout.x);
                 const scrollOffset = { x: Math.abs(fieldViews[0].x), y: Math.abs(fieldViews[0].y) };
 
                 animation[props.player[i].id] = {};
@@ -47,7 +46,6 @@ const BoardView = forwardRef((props, ref) => {
                         <PlayerView player={props.player[i]} size={playerSize} />
                     </Animated.View>
                 );
-
             }
             setanimation(animation.slice())
             setPlayerViews(newPlayerViews.slice());
@@ -95,26 +93,18 @@ const BoardView = forwardRef((props, ref) => {
             for (let j = 0; j < props.fields[i].length; j++) {
                 const field = props.fields[i][j];
                 const size = { width: 0, height: 0 }
-                if (field.relativeSize.isSquare) {
-                    if (MAX_SIZE.width < MAX_SIZE.height) {
-                        //potrait
-                        size.width = field.relativeSize.size * MAX_SIZE.width * zoom
-                        size.height = size.width;
-                    } else {
-                        //landscape
-                        size.height = field.relativeSize.size * MAX_SIZE.height * zoom;
-                        size.width = size.height;
-                    }
-                } else {
-                    size.width = field.relativeSize.size * MAX_SIZE.width * zoom;
-                    size.height = field.relativeSize.size * MAX_SIZE.height * zoom;
-                }
+
+                size.width = field.relativeSize.width * MAX_SIZE * zoom;
+                size.height = field.relativeSize.height * MAX_SIZE * zoom;
+
                 fieldRow.push(
                     <FieldView
                         key={'field_' + field.id}
                         field={field}
                         width={size.width}
                         height={size.height}
+                        padding={field.relativeSize.padding}
+                        connectionLines={field.connectionLines}
                         setFieldLayout={(field, layout) => setFieldLayout(field, layout)}
                     />
                 )
@@ -125,7 +115,7 @@ const BoardView = forwardRef((props, ref) => {
     };
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: '#000000' }}>
             <ScrollView horizontal={true}>
                 <ScrollView style={{ flex: 1 }}>
                     {fields}
